@@ -1,28 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
+import "./App.css";
 
-export default function SalesUploader({ onFileUpload }) {
+export default function FileUploader({ onFileUpload }) {
+  const [fileName, setFileName] = useState("");
+
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        const content = event.target.result;
-        onFileUpload(content);
-      };
-      reader.readAsText(file);
+      setFileName(file.name);
+      onFileUpload(file);
     }
   };
 
   return (
-    <div style={{ marginBottom: "1rem" }}>
-      <label htmlFor="salesFile">Importer un fichier de ventes :</label>
-      <input
-        type="file"
-        id="salesFile"
-        accept=".txt,.csv,.xlsx"
-        onChange={handleFileChange}
-        style={{ display: "block", marginTop: "0.5rem" }}
-      />
+    <div className="file-uploader">
+      <label htmlFor="file-upload" className="file-upload-label">
+        📁 Choisir un fichier
+      </label>
+      <input id="file-upload" type="file" onChange={handleFileChange} />
+      {fileName && <span className="file-name">{fileName}</span>}
     </div>
   );
 }

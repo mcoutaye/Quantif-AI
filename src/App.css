@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Varela+Round&display=swap');
+
 .App {
   text-align: center;
 }
@@ -13,15 +15,44 @@
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.app-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+
+  padding: 0.5rem 2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+  background: rgba(7, 54, 56, 0.3);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
   color: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.logo-image {
+  height: 75px;
+  width: auto;
+  object-fit: contain;
+}
+
+.logo-text {
+  margin: 0;
+  margin-bottom: 0.5%;
+  margin-top: 0.5%;
+  margin-left: -7%;
+  font-size: 1.5rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+  font-size: 35px;
+  font-family: 'Varela Round', sans-serif;
 }
 
 .App-link {
@@ -32,7 +63,400 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
+}
+
+/* === Ajouts pour ton app === */
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  background: #e7feff;
+  background-size: 400% 400%;
+}
+
+.app-container {
+  max-width: 750px;
+  margin: 10rem auto 2rem auto;
+  font-family: Arial, sans-serif;
+}
+
+.app-card {
+  position: relative;
+  padding-top: 0px;
+  padding-left: 30px;
+  padding-right: 30px;
+  padding-bottom: 40px;
+  border: 7px solid #2c5e61;
+  border-radius: 12px;
+  background: #f4feff;
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  background-size: 300%, 300%;
+  background-position: 0% 0%, 0% 50%;
+}
+
+.app-title {
+  margin-bottom: 1%;
+  font-family: 'Varela Round', sans-serif;
+  font-size: 75px;
+  text-align: center;
+  position: center;
+}
+
+.app-help {
+  text-align: center;
+  font-size: 15px;
+}
+
+.tooltip-container {
+  cursor: default;
+  margin-left: 12%;
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip-content {
+  visibility: hidden;
+  opacity: 0;
+  width: 300px;
+  background-color: #fff;
+  color: #333;
+  text-align: left;
+  border-radius: 8px;
+  padding: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  position: absolute;
+  top: 50%;
+  left: 105%;
+  transform: translateY(-50%);
+  z-index: 1;
+  transition: opacity 0.3s;
+}
+
+.tooltip-container:hover .tooltip-content {
+  visibility: visible;
+  opacity: 1;
+}
+
+.tooltip-content img {
+  max-width: 100%;
+  margin-top: 10px;
+  border-radius: 4px;
+}
+
+.file-uploader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  gap: 0.5rem;
+  font-family: 'Roboto', sans-serif;
+  color: #073638;
+}
+
+.error-message {
+  margin-left: 28%;
+  color: red;
+}
+
+.file-uploader input[type="file"] {
+  display: none;
+}
+
+.file-upload-label {
+  background: linear-gradient(135deg, #073638, #276164);
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+  font-size: 1rem;
+  box-shadow: 0 4px 10px rgba(7, 54, 56, 0.3);
+}
+
+.file-upload-label:hover {
+  background: linear-gradient(135deg, #276164, #5e8892);
+  box-shadow: 0 6px 14px rgba(7, 54, 56, 0.4);
+}
+
+.file-name {
+  font-size: 0.9rem;
+  color: #073638;
+  font-style: italic;
+  max-width: 300px;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.date-section {
+  margin: 1.5rem 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 1rem;
+  font-family: 'Roboto', sans-serif;
+  flex-wrap: wrap;
+}
+
+.date-section text {
+  margin-left: 20%;
+}
+
+.date-section input[type="date"] {
+  margin-top: 10%;
+  padding: 0.4rem 0.8rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  background-color: #f8f8f8;
+  color: #073638;
+  transition: border-color 0.2s;
+}
+
+.date-section input[type="date"]:focus {
+  outline: none;
+  border-color: #276164;
+}
+
+@supports (-webkit-appearance: none) or (-moz-appearance: none) {
+  .checkbox-section input[type=checkbox] {
+    --active: #276164;
+    --active-inner: #fff;
+    --focus: 2px rgba(39, 94, 254, .3);
+    --border: #BBC1E1;
+    --border-hover: #276164;
+    --background: #fff;
+    --disabled: #F6F8FF;
+    --disabled-inner: #E1E6F9;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    height: 21px;
+    outline: none;
+    display: inline-block;
+    vertical-align: top;
+    position: relative;
+    margin: 0;
+    cursor: pointer;
+    border: 1px solid var(--bc, var(--border));
+    background: var(--b, var(--background));
+    transition: background 0.3s, border-color 0.3s, box-shadow 0.2s;
+  }
+
+  .checkbox-section input[type=checkbox]:after {
+    content: "";
+    display: block;
+    left: 0;
+    top: 0;
+    position: absolute;
+    transition: transform var(--d-t, 0.3s) var(--d-t-e, ease), opacity var(--d-o, 0.2s);
+  }
+
+  .checkbox-section input[type=checkbox]:checked {
+    --b: var(--active);
+    --bc: var(--active);
+    --d-o: .3s;
+    --d-t: .6s;
+    --d-t-e: cubic-bezier(.2, .85, .32, 1.2);
+  }
+
+  .checkbox-section input[type=checkbox]:disabled {
+    --b: var(--disabled);
+    cursor: not-allowed;
+    opacity: 0.9;
+  }
+
+  .checkbox-section input[type=checkbox]:disabled:checked {
+    --b: var(--disabled-inner);
+    --bc: var(--border);
+  }
+
+  .checkbox-section input[type=checkbox]:disabled+label {
+    cursor: not-allowed;
+  }
+
+  .checkbox-section input[type=checkbox]:hover:not(:checked):not(:disabled) {
+    --bc: var(--border-hover);
+  }
+
+  .checkbox-section input[type=checkbox]:focus {
+    box-shadow: 0 0 0 var(--focus);
+  }
+
+  .checkbox-section input[type=checkbox]:not(.switch) {
+    width: 21px;
+  }
+
+  .checkbox-section input[type=checkbox]:not(.switch):after {
+    opacity: var(--o, 0);
+  }
+
+  .checkbox-section input[type=checkbox]:not(.switch):checked {
+    --o: 1;
+  }
+
+  .checkbox-section input[type=checkbox]+label {
+    display: inline-block;
+    vertical-align: middle;
+    cursor: pointer;
+    margin-left: 4px;
+  }
+
+  .checkbox-section input[type=checkbox]:not(.switch) {
+    border-radius: 7px;
+  }
+
+  .checkbox-section input[type=checkbox]:not(.switch):after {
+    width: 5px;
+    height: 9px;
+    border: 2px solid var(--active-inner);
+    border-top: 0;
+    border-left: 0;
+    left: 7px;
+    top: 4px;
+    transform: rotate(var(--r, 20deg));
+  }
+
+  .checkbox-section input[type=checkbox]:not(.switch):checked {
+    --r: 43deg;
+  }
+
+  .checkbox-section input[type=checkbox].switch {
+    width: 38px;
+    border-radius: 11px;
+  }
+
+  .checkbox-section input[type=checkbox].switch:after {
+    left: 2px;
+    top: 2px;
+    border-radius: 50%;
+    width: 17px;
+    height: 17px;
+    background: var(--ab, var(--border));
+    transform: translateX(var(--x, 0));
+  }
+
+  .checkbox-section input[type=checkbox].switch:checked {
+    --ab: var(--active-inner);
+    --x: 17px;
+  }
+
+  .checkbox-section input[type=checkbox].switch:disabled:not(:checked):after {
+    opacity: 0.6;
+  }
+}
+
+.checkbox-section * {
+  box-sizing: inherit;
+}
+
+.checkbox-section *:before,
+.checkbox-section *:after {
+  box-sizing: inherit;
+}
+
+.checkbox-section {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin: 1.5rem 0;
+  font-family: 'Roboto', sans-serif;
+  font-size: 1rem;
+}
+
+.checkbox-section label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  color: #073638;
+}
+
+.analyze-button {
+  margin-left: 41%;
+  background: linear-gradient(135deg, #073638, #276164);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.7rem 1.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(7, 54, 56, 0.3);
+}
+
+.analyze-button:hover {
+  background: linear-gradient(135deg, #276164, #5e8892);
+  box-shadow: 0 6px 14px rgba(7, 54, 56, 0.4);
+}
+
+.analyze-button:disabled {
+  background: #999;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.result-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+  margin-bottom: 60px;
+}
+
+.output-card {
+  position: relative;
+  padding-top: 0px;
+  padding-left: 30px;
+  padding-right: 30px;
+  padding-bottom: 40px;
+  border: 7px solid #2c5e61;
+  border-radius: 12px;
+  background: #f4feff;
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  background-size: 300%, 300%;
+  background-position: 0% 0%, 0% 50%;
+}
+
+.result-card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 24px;
+  max-width: 900px;
+  width: 90%;
+  white-space: pre-wrap;
+  color: #333;
+}
+
+.download-button {
+  margin-left: 1%;
+  background: linear-gradient(135deg, #073638, #276164);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.7rem 1.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(7, 54, 56, 0.3);
+}
+
+.download-button:hover {
+  background: linear-gradient(135deg, #276164, #5e8892);
+  box-shadow: 0 6px 14px rgba(7, 54, 56, 0.4);
+}
+
+.download-button:active {
+  box-shadow: 0 2px 6px rgba(7, 54, 56, 0.6);
+  transform: translateY(1px);
 }
