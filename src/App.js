@@ -9,6 +9,7 @@ export default function App() {
   const [recommendation, setRecommendation] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [detailedResults, setDetailedResults] = useState([]);
 
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -37,19 +38,22 @@ export default function App() {
     formData.append("file", salesData);
     formData.append("start_date", startDate);
     formData.append("end_date", endDate);
-
-    // Ici les noms correspondent au backend : rain et holiday
     formData.append("rain", options.ingredients ? "true" : "false");
     formData.append("holiday", options.drinks ? "true" : "false");
-    formData.append("promo", options.staff ? "true" : "false"); // si tu veux gérer promo côté backend
+    formData.append("promo", options.staff ? "true" : "false");
 
     try {
       const response = await axios.post("http://localhost:5000/analyze", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
+      
+      const results = response.data.detailed_results || [];
       setRecommendation(response.data);
+      setDetailedResults(Array.isArray(results) ? results : []);
+      
     } catch (err) {
       setError("Une erreur s'est produite lors de l'analyse.");
+      console.error(err);
     } finally {
       setLoading(false);
     }
@@ -58,7 +62,6 @@ export default function App() {
   return (
     <>
       <div className="app-container">
-        {/* --- Header --- */}
         <header className="app-header">
           <img src="/Logo_Quantifai.png" alt="Logo Quantif'AI" className="logo-image" />
           <h2 className="logo-text">Quantif'AI</h2>
@@ -72,15 +75,15 @@ export default function App() {
               <p>Le fichier doit contenir les colonnes suivantes :</p>
               <ul>
                 <li><strong>Date</strong> (format JJ/MM/AAAA)</li>
-                <li><strong>Produit</strong> (nom de l'article)</li>
-                <li><strong>Quantité vendue</strong></li>
-                <li><strong>Prix</strong> (unitaire ou total)</li>
+                <li><strong>Poids total produit (kg)</strong></li>
+                <li><strong>Température (°C)</strong></li>
+                <li><strong>Nombre de clients</strong></li>
+                <li><strong>Commandes</strong></li>
+                <li><strong>Personnel présent</strong></li>
               </ul>
-              <p>Voici un exemple :</p>
-              <img src="/exemple_excel.png" alt="Exemple de fichier Excel" />
             </div>
           }>
-            <h3 className="app-help">📄 Veuillez importer un fichier Excel contenant vos données de ventes.</h3>
+            <h3 className="app-help">📄 Veuillez importer un fichier Excel contenant vos données de production.</h3>
           </Tooltip>
           <FileUploader onFileUpload={handleFileUpload} />
 
@@ -123,7 +126,7 @@ export default function App() {
                 checked={options.staff}
                 onChange={handleCheckboxChange}
               />
-              Promo
+              Promotion
             </label>
           </div>
 
@@ -134,10 +137,56 @@ export default function App() {
           {error && <p className="error-message">{error}</p>}
         </div>
       </div>
+      
       {recommendation && (
         <div className="result-container">
           <div className="result-card">
-            <h3>📝 Résultat de l'analyse :</h3>
+            <h2>📊 Résultats de l'analyse</h2>
+            
+            <div className="summary-section">
+              <div className="summary-card">
+                <h3>Recommandations moyennes</h3>
+                <p><strong>Stock moyen recommandé:</strong> {recommendation.stock} kg</p>
+                <p><strong>Personnel moyen recommandé:</strong> {recommendation.staff} personnes</p>
+              </div>
+            </div>
+            
+            <h3>Détails par jour</h3>
+            <div className="results-table-container">
+              {Array.isArray(detailedResults) && detailedResults.length > 0 ? (
+                <table className="results-table">
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Total (kg)</th>
+                      <th>Pain Burger</th>
+                      <th>Viande Burger</th>
+                      <th>Frites</th>
+                      <th>Boissons</th>
+                      <th>Autres</th>
+                      <th>Personnel recommandé</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {detailedResults.map((row, index) => (
+                      <tr key={index}>
+                        <td>{row.Date}</td>
+                        <td>{row["Total (kg)"]}</td>
+                        <td>{row["Pain Burger"]}</td>
+                        <td>{row["Viandes Burger"]}</td>
+                        <td>{row["Frites"]}</td>
+                        <td>{row["Boissons"]}</td>
+                        <td>{row["Autres"]}</td>
+                        <td>{row["Personnel recommandé"]}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              ) : (
+                <p>Aucune donnée détaillée disponible</p>
+              )}
+            </div>
+            
             <button
               className="download-button"
               onClick={() => {
@@ -148,7 +197,7 @@ export default function App() {
                 );
               }}
             >
-              📁 Télécharger le fichier
+              📁 Télécharger les résultats complets
             </button>
           </div>
         </div>

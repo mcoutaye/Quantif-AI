@@ -5,6 +5,7 @@ from prophet import Prophet
 import os
 from werkzeug.utils import secure_filename
 from datetime import datetime
+import json
 
 app = Flask(__name__)
 flask_cors.CORS(app, resources={r"/analyze": {"origins": "*"}, r"/download/*": {"origins": "*"}})
@@ -22,7 +23,7 @@ def analyze():
     if file.filename == '':
         return jsonify({'error': 'Le fichier est vide ou a un nom invalide'}), 400
 
-    filepath = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+    filepath = os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(file.filename))
     file.save(filepath)
 
     try:
@@ -98,21 +99,28 @@ def analyze():
 
         forecast = model.predict(future_df)
 
-
         ratios = {
-            "Burger buns": 0.20,
-            "Burger meat": 0.25,
-            "Fries": 0.30,
-            "Drinks": 0.10,
-            "Others": 0.15
+            "Pain Burger": 0.20,
+            "Viandes Burger": 0.25,
+            "Frites": 0.30,
+            "Boissons": 0.10,
+            "Autres": 0.15
         }
 
         detailed_rows = []
         for _, row in forecast.iterrows():
             base = row["yhat"] * adjust_factor
-            detail = {"Date": row["ds"].strftime("%Y-%m-%d"), "Total (kg)": round(base, 2)}
-            for name, ratio in ratios.items():
-                detail[name] = round((base * ratio), 2)
+            recommended_staff = max(1, int((base) // 50))  # 1 personne pour 50kg
+            detail = {
+                "Date": row["ds"].strftime("%Y-%m-%d"),
+                "Total (kg)": round(base, 2),
+                "Pain Burger": round((base * ratios["Pain Burger"]), 2),
+                "Viandes Burger": round((base * ratios["Viandes Burger"]), 2),
+                "Frites": round((base * ratios["Frites"]), 2),
+                "Boissons": round((base * ratios["Boissons"]), 2),
+                "Autres": round((base * ratios["Autres"]), 2),
+                "Personnel recommandé": recommended_staff
+            }
             detailed_rows.append(detail)
 
         output_filename = 'Prevision_Produits.xlsx'
@@ -121,13 +129,15 @@ def analyze():
 
         os.remove(filepath)
 
-        recommended_stock = round(forecast["yhat"].iloc[0] * adjust_factor * 1.1)
-        recommended_staff = max(1, int((forecast["yhat"].iloc[0] * adjust_factor) // 50))
+        # Calcul des moyennes pour le résumé
+        total_avg = round(sum(row["Total (kg)"] for row in detailed_rows) / len(detailed_rows), 2)
+        staff_avg = round(sum(row["Personnel recommandé"] for row in detailed_rows) / len(detailed_rows))
 
         return jsonify({
-            'stock': recommended_stock,
-            'staff': recommended_staff,
-            'output_file': output_filename
+            'stock': total_avg,
+            'staff': staff_avg,
+            'output_file': output_filename,
+            'detailed_results': detailed_rows
         })
 
     except Exception as e:
@@ -141,8 +151,14 @@ def analyze():
 def download_file(filename):
     safe_filename = secure_filename(filename)
     file_path = os.path.join(app.config['UPLOAD_FOLDER'], safe_filename)
+
     if not os.path.exists(file_path):
         return jsonify({'error': 'Fichier non trouvé'}), 404
+
+    if request.headers.get('Accept') == 'application/json':
+        df = pd.read_excel(file_path)
+        return jsonify(df.to_dict(orient='records'))
+
     return send_from_directory(app.config['UPLOAD_FOLDER'], safe_filename, as_attachment=True)
 
 if __name__ == '__main__':
