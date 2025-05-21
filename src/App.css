@@ -124,7 +124,7 @@ body {
 }
 
 .tooltip-content {
-  visibility: hidden;
+  visibility: visible;
   opacity: 0;
   width: 300px;
   background-color: #fff;
@@ -141,7 +141,7 @@ body {
   transition: opacity 0.3s;
 }
 
-.tooltip-container:hover .tooltip-content {
+.app-help:hover .tooltip-content {
   visibility: visible;
   opacity: 1;
 }

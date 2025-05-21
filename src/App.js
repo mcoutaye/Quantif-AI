@@ -67,21 +67,19 @@ export default function App() {
 
         <div className="app-card">
           <h1 className="app-title">Analyse de données</h1>
-          <Tooltip
-            content={
-              <div>
-                <p>Le fichier doit contenir les colonnes suivantes :</p>
-                <ul>
-                  <li><strong>Date</strong> (format JJ/MM/AAAA)</li>
-                  <li><strong>Produit</strong> (nom de l’article)</li>
-                  <li><strong>Quantité vendue</strong></li>
-                  <li><strong>Prix</strong> (unitaire ou total)</li>
-                </ul>
-                <p>Voici un exemple :</p>
-                <img src="/exemple_excel.png" alt="Exemple de fichier Excel" />
-              </div>
-            }
-          >
+          <Tooltip content={
+            <div>
+              <p>Le fichier doit contenir les colonnes suivantes :</p>
+              <ul>
+                <li><strong>Date</strong> (format JJ/MM/AAAA)</li>
+                <li><strong>Produit</strong> (nom de l'article)</li>
+                <li><strong>Quantité vendue</strong></li>
+                <li><strong>Prix</strong> (unitaire ou total)</li>
+              </ul>
+              <p>Voici un exemple :</p>
+              <img src="/exemple_excel.png" alt="Exemple de fichier Excel" />
+            </div>
+          }>
             <h3 className="app-help">📄 Veuillez importer un fichier Excel contenant vos données de ventes.</h3>
           </Tooltip>
           <FileUploader onFileUpload={handleFileUpload} />

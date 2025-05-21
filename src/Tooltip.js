@@ -1,42 +1,49 @@
-import React from "react";
+import React, { useState } from "react";
 import "./App.css";
 
-export default function Tooltip({ children, content }) {
+// Modifiez votre Tooltip component comme ceci :
+export default function Tooltip({ content, children }) {
+  const [isVisible, setIsVisible] = useState(false);
   return (
-    <div className="tooltip-container" style={{ position: "relative", display: "inline-block" }}>
+    <div
+      className="tooltip-container"
+      style={{ position: "relative", display: "inline-block" }}
+      onMouseEnter={() => setIsVisible(true)}
+      onMouseLeave={() => setIsVisible(false)}
+    >
       {children}
-      <div
-        className="tooltip-content"
-        style={{
-          visibility: "hidden",
-          backgroundColor: "#555",
-          color: "#fff",
-          textAlign: "left",
-          borderRadius: "6px",
-          padding: "8px",
-          position: "absolute",
-          zIndex: 1,
-          bottom: "125%",
-          left: "50%",
-          marginLeft: "-120px",
-          width: "240px",
-          opacity: 0,
-          transition: "opacity 0.3s",
-        }}
-      >
-        {content}
+      {isVisible && (
         <div
+          className="tooltip-content"
           style={{
             position: "absolute",
-            top: "100%",
+            backgroundColor: "#555",
+            color: "#fff",
+            textAlign: "left",
+            borderRadius: "6px",
+            padding: "8px",
+            zIndex: 1,
+            bottom: "125%",
             left: "50%",
-            marginLeft: "-5px",
-            borderWidth: "5px",
-            borderStyle: "solid",
-            borderColor: "#555 transparent transparent transparent",
+            transform: "translateX(-50%)",
+            width: "240px",
+            boxShadow: "0 2px 10px rgba(0,0,0,0.2)",
           }}
-        />
-      </div>
+        >
+          {content}
+          <div
+            style={{
+              position: "absolute",
+              top: "100%",
+              left: "50%",
+              marginLeft: "-5px",
+              borderWidth: "5px",
+              borderStyle: "solid",
+              borderColor: "#555 transparent transparent transparent",
+            }}
+          />
+        </div>
+      )}
     </div>
   );
 }
